@@ -1,5 +1,7 @@
 const inquirer = require("inquirer");
-const Employee = require("./lib/Employee.js");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
+const Manager = require("./lib/Manager");
 
 const roster = () => {
   return inquirer.prompt([
@@ -21,10 +23,14 @@ const roster = () => {
       name: "managerId",
       message: "Please enter the manager's Id.",
       validate: (managerId) => {
-        if (managerId.isInteger()) {
+        managerId = parseInt(managerId);
+
+        console.log(managerId);
+
+        if (Number.isInteger(managerId)) {
           return true;
         } else {
-          console.log("Please enter");
+          console.log("Please enter a valid id number");
           return false;
         }
       },
@@ -47,8 +53,9 @@ const roster = () => {
       name: "managerNumber",
       message: "Please enter a 10 digit phone number.",
       validate: (managerNumber) => {
-        const userInput = parseInt(managerNumber).split("");
-        if (userInput === 10) {
+        const userInput = parseInt(managerNumber);
+        const managerNumberArr = managerNumber.split("");
+        if (managerNumberArr.length === 10 && Number.isInteger(userInput)) {
           return true;
         } else {
           console.log("Please enter a valid number!");
@@ -65,3 +72,7 @@ const roster = () => {
     },
   ]);
 };
+
+roster().then((newObject) => {
+  console.log(newObject.menu);
+});
