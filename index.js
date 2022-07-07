@@ -29,5 +29,39 @@ const roster = () => {
         }
       },
     },
+    {
+      type: "input",
+      name: "managerEmail",
+      message: "Please enter the email address of the manager.",
+      validate: (managerEmail) => {
+        if (managerEmail.includes("@") && managerEmail.includes(".com")) {
+          return true;
+        } else {
+          console.log("Please enter a valid email address");
+          return false;
+        }
+      },
+    },
+    {
+      type: "input",
+      name: "managerNumber",
+      message: "Please enter a 10 digit phone number.",
+      validate: (managerNumber) => {
+        const userInput = parseInt(managerNumber).split("");
+        if (userInput === 10) {
+          return true;
+        } else {
+          console.log("Please enter a valid number!");
+          return false;
+        }
+      },
+    },
+    {
+      type: "list",
+      name: "menu",
+      message: "Please add an employee or finish your roster",
+      choices: ["engineer", "intern", "Finish building my team"],
+      default: "Finish building my team",
+    },
   ]);
 };
