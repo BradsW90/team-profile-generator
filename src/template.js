@@ -25,7 +25,7 @@ const rosterPage = (rosterData) => {
   <div class="card">
   <div class="card-title">
   <h3>${newManager.getName()}</h3>
-  <h3><i class="fa-brands fa-dev">${newManager.getRole()}</h3>
+  <h3><i class="fa-solid fa-person">${newManager.getRole()}</h3>
   </div>
   <div class="attribute">ID: ${newManager.getId()}</div>
   <div class="attribute">Email: <a href="mailTo:${newManager.getEmail()}">${newManager.getEmail()}</a></div>
@@ -37,7 +37,7 @@ const rosterPage = (rosterData) => {
         return `<div class="card">
     <div class="card-title">
     <h3>${classes.getName()}</h3>
-    <h3>${classes.getRole()}</h3>
+    <h3><i class="fa-solid fa-school"><i>${classes.getRole()}</h3>
     </div>
     <div class="attribute">ID: ${classes.getId()}</div>
     <div class="attribute">Email: <a href="mailTo:${classes.getEmail()}">${classes.getEmail()}</a></div>
@@ -47,7 +47,7 @@ const rosterPage = (rosterData) => {
         return `<div class="card">
       <div class="card-title">
       <h3>${classes.getName()}</h3>
-      <h3>${classes.getRole()}</h3>
+      <h3><i class="fa-brands fa-dev"></i>${classes.getRole()}</h3>
       </div>
       <div class="attribute">ID: ${classes.getId()}</div>
       <div class="attribute">Email: <a href="mailTo:${
