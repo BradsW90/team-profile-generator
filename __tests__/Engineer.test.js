@@ -9,7 +9,7 @@ describe("Engineer", () => {
     expect(result.getName()).toEqual("Engineer");
     expect(result.getId()).toEqual("1224");
     expect(result.getEmail()).toEqual("engineer@gmail.com");
-    expect(result.getUserName()).toEqual("github.com/engineer");
+    expect(result.getGithub()).toEqual("github.com/engineer");
     expect(result.getRole()).toEqual("Engineer");
   });
 });

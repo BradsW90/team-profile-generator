@@ -1,73 +1,76 @@
 const inquirer = require("inquirer");
+const fs = require("fs");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
-const Manager = require("./lib/Manager");
+const rosterPage = require("./src/template");
 
 const addManager = () => {
-  return inquirer.prompt([
-    {
-      type: "input",
-      name: "managerName",
-      message: "Please enter the name of the team Manager.",
-      validate: (teamManager) => {
-        if (teamManager) {
-          return true;
-        } else {
-          console.log("Please enter a team managers name!");
-          return false;
-        }
+  return inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "managerName",
+        message: "Please enter the name of the team Manager.",
+        validate: (teamManager) => {
+          if (teamManager) {
+            return true;
+          } else {
+            console.log("Please enter a team managers name!");
+            return false;
+          }
+        },
       },
-    },
-    {
-      type: "input",
-      name: "managerId",
-      message: "Please enter the manager's Id.",
-      validate: (managerId) => {
-        managerId = parseInt(managerId);
+      {
+        type: "input",
+        name: "managerId",
+        message: "Please enter the manager's Id.",
+        validate: (managerId) => {
+          managerId = parseInt(managerId);
 
-        if (Number.isInteger(managerId)) {
-          return true;
-        } else {
-          console.log("Please enter a valid id number");
-          return false;
-        }
+          if (Number.isInteger(managerId)) {
+            return true;
+          } else {
+            console.log("Please enter a valid id number");
+            return false;
+          }
+        },
       },
-    },
-    {
-      type: "input",
-      name: "managerEmail",
-      message: "Please enter the email address of the manager.",
-      validate: (managerEmail) => {
-        if (managerEmail.includes("@") && managerEmail.includes(".com")) {
-          return true;
-        } else {
-          console.log("Please enter a valid email address");
-          return false;
-        }
+      {
+        type: "input",
+        name: "managerEmail",
+        message: "Please enter the email address of the manager.",
+        validate: (managerEmail) => {
+          if (managerEmail.includes("@") && managerEmail.includes(".com")) {
+            return true;
+          } else {
+            console.log("Please enter a valid email address");
+            return false;
+          }
+        },
       },
-    },
-    {
-      type: "input",
-      name: "managerNumber",
-      message: "Please enter a 10 digit phone number.",
-      validate: (managerNumber) => {
-        const userInput = parseInt(managerNumber);
-        const managerNumberArr = managerNumber.split("");
-        if (managerNumberArr.length === 10 && Number.isInteger(userInput)) {
-          return true;
-        } else {
-          console.log("Please enter a valid number!");
-          return false;
-        }
+      {
+        type: "input",
+        name: "managerNumber",
+        message: "Please enter a 10 digit phone number.",
+        validate: (managerNumber) => {
+          const userInput = parseInt(managerNumber);
+          const managerNumberArr = managerNumber.split("");
+          if (managerNumberArr.length === 10 && Number.isInteger(userInput)) {
+            return true;
+          } else {
+            console.log("Please enter a valid number!");
+            return false;
+          }
+        },
       },
-    },
-  ]);
+    ])
+    .then((managerData) => {
+      managerData.roster = [];
+      return managerData;
+    });
 };
 
 const menu = (dataObj) => {
-  if (!dataObj.roster) {
-    dataObj.roster = [];
-  }
   return inquirer
     .prompt([
       {
@@ -78,18 +81,13 @@ const menu = (dataObj) => {
         default: "Finish building my team",
       },
     ])
-    .then((newDataObj) => {
-      let combine = {
-        ...dataObj,
-        ...newDataObj,
-      };
-
-      if (combine.menu === "engineer") {
-        return addEngineer(combine);
-      } else if (combine.menu === "intern") {
-        return addIntern(combine);
+    .then((menuData) => {
+      if (menuData.menu === "engineer") {
+        return addEngineer(dataObj);
+      } else if (menuData.menu === "intern") {
+        return addIntern(dataObj);
       } else {
-        return combine;
+        return dataObj;
       }
     });
 };
@@ -152,8 +150,19 @@ const addEngineer = (objectData) => {
         },
       },
     ])
-    .then((newData) => {
-      objectData.roster.push(newData);
+    .then((engineerData) => {
+      const { engineerName, engineerId, engineerEmail, engineerGithub } =
+        engineerData;
+
+      const engineerClass = new Engineer(
+        engineerName,
+        engineerId,
+        engineerEmail,
+        engineerGithub
+      );
+
+      objectData.roster.push(engineerClass);
+
       return menu(objectData);
     });
 };
@@ -217,7 +226,17 @@ const addIntern = (nextData) => {
       },
     ])
     .then((internData) => {
-      nextData.roster.push(internData);
+      const { internName, internId, internEmail, internSchool } = internData;
+
+      const internClass = new Intern(
+        internName,
+        internId,
+        internEmail,
+        internSchool
+      );
+
+      nextData.roster.push(internClass);
+
       return menu(nextData);
     });
 };
@@ -225,5 +244,9 @@ const addIntern = (nextData) => {
 addManager()
   .then(menu)
   .then((FinishedData) => {
-    console.log(FinishedData);
+    const rosterHTML = rosterPage(FinishedData);
+    fs.writeFile("./dist/index.html", rosterHTML, (err) => {
+      if (err) throw err;
+    });
+    console.log("Your roster HTML was created in the dist folder!");
   });
