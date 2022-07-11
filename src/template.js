@@ -51,9 +51,9 @@ const rosterPage = (rosterData) => {
           </div>
           <div class="attribute">ID: ${classes.getId()}</div>
           <div class="attribute">Email: <a href="mailTo:${
-            classes.getEmail
+            classes.getEmail()
           }">${classes.getEmail()}</a></div>
-          <div class="attribute">GitHub account: <a href="github.com/${classes.getGithub()}">${classes.getGithub()}</a></div>
+          <div class="attribute">GitHub account: <a href="https://github.com/${classes.getGithub()}" target="_blank">${classes.getGithub()}</a></div>
           </div>`;
           }
         })
